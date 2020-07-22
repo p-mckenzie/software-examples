@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 # import custom game class
-from TicTacToeGame import TicTacToe
+from BaseGame import TicTacToe
 
 #Initialzing 
 pygame.init()
@@ -28,7 +28,7 @@ SCREEN_HEIGHT = 360
 font = pygame.font.SysFont("Verdana", 60)
 font_small = pygame.font.SysFont("Verdana", 20)
 
-background = pygame.image.load("tictactoe_background.jpg")
+background = pygame.image.load("./assets/tictactoe_background.jpg")
 
 #Create a white screen 
 DISPLAYSURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
@@ -46,9 +46,9 @@ class block(pygame.sprite.Sprite):
         
     def display(self, user):
         if user==1:
-            self.image = pygame.image.load("x.jpg")
+            self.image = pygame.image.load("./assets/x.jpg")
         else:
-            self.image = pygame.image.load("o.jpg")
+            self.image = pygame.image.load("./assets/o.jpg")
         
 sprites = []
 for i in range(9):
@@ -143,6 +143,7 @@ while play:
 
         pygame.display.update()
     records[game.winner*-1+1] += 1
+    time.sleep(.5)
     play = keep_playing()
 	
 pygame.display.quit()
