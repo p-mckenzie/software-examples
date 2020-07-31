@@ -6,17 +6,12 @@ class TicTacToe():
         self.game_finished = False
         self.user = 1
         
-        self.corner = np.zeros((3,3))
+        self.fork = np.zeros((3,3), dtype=bool)
+        self.fork[:,0] = 1
+        self.fork[0,:] = 1
+        
+        self.corner = np.zeros((3,3), dtype=bool)
         self.corner[0,0] = 1
-        self.corner = self.corner.astype(bool)
-        self.fork = np.zeros((3,3))
-        self.fork[0,1] = 1
-        self.fork[1,0] = 1
-        self.fork = self.fork.astype(bool)
-        self.space = np.zeros((3,3))
-        self.space[0,2] = 1
-        self.space[2,0] = 1
-        self.space = self.space.astype(bool)
         
     def is_game_finished(self):
         for i in range(3):
@@ -76,19 +71,20 @@ class TicTacToe():
         if self.twos(-1*self.user):
             return
         
-        # --------------- fork or block fork ----------------------------
-        # l fork in corners
-        for i in range(4):
-            if (np.all(self.board[np.rot90(self.corner,i)]==0) and
-                  np.all(self.board[np.rot90(self.space,i)]==0) and
-                 (np.all(self.board[np.rot90(self.fork,i)]==-1) or np.all(self.board[np.rot90(self.fork,i)]==1))):
-                self.board = np.where(np.rot90(self.corner,i), self.user, self.board)
-                return
-        
-        # diagonal double fork (left and right)
-        if ((self.board!=0).sum()==3 and (self.board[np.identity(3, dtype=np.bool)[::-1]]==np.array([1,-1,1])).all() and (self.board[np.identity(3, dtype=np.bool)] == np.array([0,-1,0])).all()) or ((self.board!=0).sum()==3 and (self.board[np.identity(3, dtype=np.bool)]==np.array([1,-1,1])).all() and (self.board[np.identity(3, dtype=np.bool)[::-1]] == np.array([0,-1,0])).all()):
+        # --------------- block fork ----------------------------
+        # diagonal double fork
+        if (self.board!=0).sum()==3 and self.board[1,1]==self.user and ((self.board[np.rot90(self.corner, 2) | np.rot90(self.corner, 0)]==-1*self.user).all() 
+                    or (self.board[np.rot90(self.corner, 3) | np.rot90(self.corner, 1)]==-1*self.user).all()):
             self.board[1,0] = self.user
             return
+        
+        # single fork
+        for i in range(4):
+            if (self.board[np.rot90(self.fork, i)]==self.user*-1).sum()==2 and (self.board[np.rot90(self.fork, i)]==0).sum()==3:
+                self.board[np.rot90(self.corner, i)] = self.user
+                return
+        
+        
         
         # --------------- center ----------------------------
         if self.board[1,1]==0:
@@ -163,29 +159,3 @@ class TicTacToe():
             print("{} won by {}!".format(self.winner, self.how))
         else:
             print("It's a draw!")
-            
-    def do_games(self):
-        log = []
-        while not self.game_finished:
-            if self.user==1:
-                # user has made fewer moves, so let them make the move
-                
-                move =  np.random.randint(0,9)
-                while self.board[move//3, move%3]!=0:
-                    move =  np.random.randint(0,9)
-
-                self.board[move//3, move%3] = 1
-                
-            else:           
-                # make computer move
-                self.make_computer_move()
-                    
-            # check if the new move made either player win
-            self.game_finished = self.is_game_finished()
-            self.user *= -1
-            log.append(self.board.copy())
-            
-        if self.winner==1:
-            print("Found one!")
-            for item in log:
-                print(item)
