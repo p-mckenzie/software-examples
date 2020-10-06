@@ -30,7 +30,7 @@ class TicTacToe():
         # check diagonal
         if abs((self.board * np.identity(3)).sum())==3 or abs((self.board * np.identity(3)[::-1]).sum())==3:
             self.winner = self.user
-            self.how = 'horizontal'
+            self.how = 'diagonal'
             return True
             
         if ~(self.board==0).max():
