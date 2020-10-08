@@ -9,10 +9,6 @@ from BaseGame import TicTacToe
 #Initialzing 
 pygame.init()
 
-#Setting up FPS 
-FPS = 1
-FramePerSec = pygame.time.Clock()
-
 #Creating colors
 BLUE  = (0, 0, 255)
 RED   = (255, 0, 0)
@@ -50,35 +46,32 @@ class block(pygame.sprite.Sprite):
         else:
             self.image = pygame.image.load("./assets/o.jpg")
         
-sprites = []
-for i in range(9):
-    new_sprite = block(i)
-    sprites.append(new_sprite)
+sprites = [block(i) for i in range(9)]
           
 def keep_playing():
     # runs after game finishes to get user input
+    
+    # draw button and background
+    DISPLAYSURF.fill(WHITE)
+    
+    button = Rect(SCREEN_WIDTH/2-150, SCREEN_HEIGHT/2-50, 300, 100)
+    pygame.draw.rect(DISPLAYSURF, GREEN, button)
+    
+    text = font_small.render('Click here to play again!', True, BLACK)
+    text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+    DISPLAYSURF.blit(text, text_rect)
+    
+    
+    DISPLAYSURF.blit(font_small.render('User wins: {}'.format(records[0]), True, BLACK), 
+                     (0, 0))
+    DISPLAYSURF.blit(font_small.render('Ties: {}'.format(records[1]), True, BLACK), 
+                     (0, text_rect.height))
+    DISPLAYSURF.blit(font_small.render('Computer wins: {}'.format(records[2]), True, BLACK), 
+                     (0, text_rect.height*2))
+    
+    # update layout
+    pygame.display.update()
     while True:
-        button = Rect(SCREEN_WIDTH/2-150, SCREEN_HEIGHT/2-50, 300, 100)
-        
-        # draw button and background
-        DISPLAYSURF.fill(WHITE)
-        pygame.draw.rect(DISPLAYSURF, GREEN, button)
-        
-        text = font_small.render('Click here to play again!', True, BLACK)
-        text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-        DISPLAYSURF.blit(text, text_rect)
-        
-        
-        DISPLAYSURF.blit(font_small.render('User wins: {}'.format(records[0]), True, BLACK), 
-                         (0, 0))
-        DISPLAYSURF.blit(font_small.render('Ties: {}'.format(records[1]), True, BLACK), 
-                         (0, text_rect.height))
-        DISPLAYSURF.blit(font_small.render('Computer wins: {}'.format(records[2]), True, BLACK), 
-                         (0, text_rect.height*2))
-        
-        # update layout
-        pygame.display.update()
-
         for event in pygame.event.get():
             if event.type == QUIT:
                     pygame.display.quit()
