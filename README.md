@@ -1,9 +1,11 @@
-# UI Example Projects
+# Software Example Projects
 
-A collection of projects by Paige McKenzie, centered around building various user interfaces. 
+A collection of projects by Paige McKenzie, centered around expanding my software engineering skillset. 
 
 Table of Contents
 ======
+[Markov chains for text generation](#markov)
+
 [Unbeatable Tic-tac-toe with Pygame](#tic-tac-toe)
 
 <a name="tic-tac-toe"/>
@@ -30,3 +32,36 @@ Files:
 
 Software:
 Python 3.6, relying on numpy. Pygame version 1.9.6 was used for `PlayPygame.py`.
+
+<a name="markov"/>
+
+## Markov chains for text generation
+Wrote adaptable program that accepts input text and uses Markov chains of various sizes
+to genreate text similar to the input corpus. 
+
+See my [blog post](https://p-mckenzie.github.io/2020/11/03/markov-chains/) describing the project.
+
+Files:
+```
++-- markov
+    --generate_sentences.py
+```
+
+`generate_sentences.py` usage:
+
+```
+--filename FILENAME, -f FILENAME
+                        Path to raw .txt file. If none is provided, defaults
+                        to most recently-created dictionaries.
+  --simulations SIMULATIONS, -s SIMULATIONS
+                        the # of random sentences to build, defaults to 10
+  --markovsize MARKOVSIZE, -m MARKOVSIZE
+                        the # of tokens to consider when building sentences,
+                        defaults to 2
+  --randomseed RANDOMSEED, -r RANDOMSEED
+                        the random seed to use when building sentences,
+                        defaults to 1
+```
+
+Software:
+Python 3.6, relying on pandas, scikit-learn, re, and NLTK.
